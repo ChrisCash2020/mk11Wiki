@@ -32,8 +32,12 @@ body {
   gap: 20px;
 }
 .container img {
-  width: max(8vw, 250px);
-  height: max(8vw, 250px);
+  width: max(8vw, 190px);
+  height: max(8vw, 190px);
+}
+.character-container img {
+  width: max(8vw, 200px);
+  height: max(8vw, 220px);
 }
 .character-container {
   background-color: #2d323b;
@@ -44,17 +48,19 @@ body {
   align-items: center;
   text-align: center;
   cursor: pointer;
-  padding: 50px 25px;
-  margin-bottom: 3vw;
-  width: max(15.229vw, 220px);
-  height: max(17.5vw, 220px);
+  padding: 5px;
+  margin: 0;
+  /* margin-bottom: 3vw; */
+  width: max(15.229vw, 250px);
+  height: max(17.5vw, 300px);
 }
+
 .character-container h1 {
   font-family: Metal mania;
   letter-spacing: 2px;
 }
 .character-container:hover {
-  box-shadow: 0px 15px 20px -15px #f72c25;
+  box-shadow: 0px 15px 20px -15px #fff;
   transform: scale(1.05);
 }
 .navbar {
@@ -140,7 +146,7 @@ main {
   background: #111;
   color: #fff;
 }
-section h2 {
+.overview-header {
   margin: 2.4px 0;
   display: block;
   font-size: 14px;
@@ -150,6 +156,9 @@ section h2 {
   text-align: center;
   width: 98%;
   border-radius: 3px;
+}
+.name {
+  font-size: 1.5rem;
 }
 .overview-container {
   width: 98%;
@@ -287,6 +296,53 @@ button {
 .loginContainer input {
   border: 2px solid grey;
   border-radius: 5px;
+}
+
+#form-btn {
+  height: 70px;
+  width: 70px;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 0 5px #ccc;
+  background-color: #2d323b;
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+}
+#form-btn:hover {
+  transform: scale(1.15);
+}
+#create {
+  position: absolute;
+  bottom: 100px;
+  right: 85px;
+  font-family: Metal mania;
+  background: #ffffff;
+  color: #000000;
+  text-align: center;
+  border-radius: 10px;
+  padding: 10px;
+  border: #ccc solid 1px;
+}
+#create::after {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 0;
+  z-index: 1;
+  border-style: solid;
+  border-color: #ffffff transparent;
+  border-width: 10px 6px 0;
+  bottom: -10px;
+  left: 50%;
+  margin-right: -6px;
+}
+#root > *:not(#form-btn) {
+  filter: var(--blur, none);
 }
 @media (max-width: 815px) {
   main {

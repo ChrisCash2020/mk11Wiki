@@ -1,8 +1,10 @@
-export default function Card() {
+import { Link } from 'react-router-dom';
+
+export default function Card(props) {
   return (
-    <div className='character-container'>
-      <img src='https://mortalkombat.fandom.com/wiki/Scorpion' />
-      <h1>Scorpion</h1>
-    </div>
+    <Link to={`/character/${props.id}`} className='character-container'>
+      <img src={props.image} />
+      <h1>{props.name}</h1>
+    </Link>
   );
 }
