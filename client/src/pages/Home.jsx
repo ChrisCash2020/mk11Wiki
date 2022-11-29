@@ -40,9 +40,9 @@ export default function Home(props) {
 
       <div className='update-article'>
         {props.authState.status == true && post.id != 1 && (
-          <button onClick={() => delPosts(post.id)} className='edit'>
+          <a onClick={() => delPosts(post.id)} className='edit'>
             <DeleteIcon />
-          </button>
+          </a>
         )}
         {props.authState.status == true && (
           <Link to={`/user/update/${post.id}`} className='edit'>
