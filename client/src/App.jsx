@@ -1,15 +1,11 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-  useNavigate,
-} from 'react-router-dom';
-import Character from './pages/Character';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import { useEffect, useState } from 'react';
-import _404 from './helpers/_404';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import Character from './pages/Character'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import { useEffect, useState } from 'react'
+import _404 from './helpers/_404'
+import CreateChar from './pages/CreateChar'
+import UpdateChar from './pages/UpdateChar'
 
 function App() {
   const [authState, setAuthState] = useState({
@@ -18,22 +14,20 @@ function App() {
       id: '',
       username: '',
     },
-  });
+  })
+  const [allPosts, setAllPosts] = useState([])
   async function checkAuth() {
-    console.log('i ran');
     const res = await fetch('http://localhost:3000/users/auth', {
       method: 'GET',
       headers: {
         Accept: 'application/json',
       },
       credentials: 'include',
-    });
-    let data = await res.json();
+    })
+    let data = await res.json()
     if (data.error) {
-      console.log(data.error);
     } else {
-      console.log(data);
-      setAuthState(data);
+      setAuthState(data)
     }
   }
   async function logOut() {
@@ -43,8 +37,8 @@ function App() {
         Accept: 'application/json',
       },
       credentials: 'include',
-    });
-    const data = await res.json();
+    })
+    const data = await res.json()
 
     setAuthState({
       status: false,
@@ -52,16 +46,16 @@ function App() {
         id: '',
         username: '',
       },
-    });
+    })
   }
   useEffect(() => {
-    checkAuth();
-  }, [setAuthState]);
+    checkAuth()
+  }, [setAuthState])
   return (
     <Router>
       <div className='navbar'>
         <div className='links'>
-          <Link to='/'>Mortal Kombat 11 Wikipedia</Link>
+          <Link to='/'>MK11 Wiki</Link>
           {authState.status ? (
             <div className='loggedInContainer'>
               <h1>{authState.user.username}</h1>
@@ -76,18 +70,49 @@ function App() {
         </div>
       </div>
       <Routes>
+        <Route
+          path='/user/update/:postId'
+          element={
+            <UpdateChar
+              authState={authState}
+              allPosts={allPosts}
+              setAllPosts={(newPost) => setAllPosts(newPost)}
+            />
+          }
+        />
+        <Route
+          path='/user/create/:userId'
+          element={
+            <CreateChar
+              authState={authState}
+              setAllPosts={(newPost) => setAllPosts(newPost)}
+            />
+          }
+        />
         <Route path='/character/:postId' element={<Character />} />
-        <Route path='/' element={<Home authState={authState} />} />
+        <Route
+          path='/'
+          element={
+            <Home
+              authState={authState}
+              allPosts={allPosts}
+              setAllPosts={(newPost) => setAllPosts(newPost)}
+            />
+          }
+        />
         <Route
           path='/auth/:type'
           element={
-            <Login setAuthState={(newState) => setAuthState(newState)} />
+            <Login
+              authState={authState}
+              setAuthState={(newState) => setAuthState(newState)}
+            />
           }
         />
         <Route path='*' element={<_404 />} />
       </Routes>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App

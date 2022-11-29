@@ -1,16 +1,14 @@
-import { useEffect } from 'react';
-import { useContext } from 'react';
-import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import _404 from '../helpers/_404';
+import { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import _404 from '../helpers/_404'
 export default function Login(props) {
-  const params = useParams();
-  const navigate = useNavigate();
-  const [loginUsername, setLoginUsername] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
+  const params = useParams()
+  const navigate = useNavigate()
+  const [loginUsername, setLoginUsername] = useState('')
+  const [loginPassword, setLoginPassword] = useState('')
 
-  const [registerUsername, setRegisterUsername] = useState('');
-  const [registerPassword, setRegisterPassword] = useState('');
+  const [registerUsername, setRegisterUsername] = useState('')
+  const [registerPassword, setRegisterPassword] = useState('')
 
   async function login() {
     const res = await fetch('http://localhost:3000/users/login', {
@@ -24,14 +22,14 @@ export default function Login(props) {
         password: loginPassword,
       }),
       credentials: 'include',
-    });
-    let data = await res.json();
+    })
+    let data = await res.json()
     if (data.length == 1) {
       props.setAuthState({
         status: true,
         user: data[0],
-      });
-      navigate('/');
+      })
+      navigate('/')
     }
   }
   async function register() {
@@ -46,19 +44,21 @@ export default function Login(props) {
         password: registerPassword,
       }),
       credentials: 'include',
-    });
-    let data = await res.json();
+    })
+    let data = await res.json()
     if (data.length == 1) {
       props.setAuthState({
         status: true,
         user: data[0],
-      });
-      navigate('/');
+      })
+      navigate('/')
     }
   }
   return (
     <>
-      {params.type == 'login' ? (
+      {props.authState.status ? (
+        <_404 message={'Already Logged In'} />
+      ) : params.type == 'login' ? (
         <div className='container'>
           <div className='loginContainer'>
             <label>Username:</label>
@@ -76,7 +76,7 @@ export default function Login(props) {
         </div>
       ) : params.type == 'register' ? (
         <div className='container'>
-          <div className='loginContainer'>
+          <div className='loginContainer' style={{ padding: '20px 40px' }}>
             <label>Username:</label>
             <input
               onChange={(e) => setRegisterUsername(e.target.value)}
@@ -94,5 +94,5 @@ export default function Login(props) {
         <_404 />
       )}
     </>
-  );
+  )
 }

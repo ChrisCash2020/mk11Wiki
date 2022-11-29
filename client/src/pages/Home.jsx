@@ -1,39 +1,70 @@
-import { useEffect, useState } from 'react';
-import Card from '../helpers/Card';
-import AddIcon from '@mui/icons-material/Add';
+import { useEffect, useState } from 'react'
+import Card from '../helpers/Card'
+import AddIcon from '@mui/icons-material/Add'
+import CreateIcon from '@mui/icons-material/Create'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { Link } from 'react-router-dom'
+import { nanoid } from 'nanoid'
 
 export default function Home(props) {
-  const [allPosts, setAllPosts] = useState([]);
+  const allPosts = props.allPosts
+  const setAllPosts = props.setAllPosts
+  async function getPosts() {
+    const res = await fetch('http://localhost:3000/posts')
+    const data = await res.json()
+    setAllPosts(data.allPosts)
+  }
+  async function delPosts(id) {
+    const res = await fetch(`http://localhost:3000/posts/delete/${id}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    })
+    getPosts()
+  }
   useEffect(() => {
-    async function getPosts() {
-      const res = await fetch('http://localhost:3000/posts');
-      const data = await res.json();
-      setAllPosts(data.allPosts);
-    }
-    getPosts();
-  }, []);
+    getPosts()
+  }, [])
   const cards = allPosts.map((post, i) => (
-    <Card
-      key={i}
-      userId={post.userId}
-      id={post.id}
-      name={post.name}
-      image={post.image}
-    />
-  ));
+    <div className='center' key={nanoid()}>
+      <Card
+        key={nanoid()}
+        userId={post.userId}
+        id={post.id}
+        name={post.name}
+        image={post.image}
+      />
+
+      <div className='update-article'>
+        {props.authState.status == true && post.id != 1 && (
+          <button onClick={() => delPosts(post.id)} className='edit'>
+            <DeleteIcon />
+          </button>
+        )}
+        {props.authState.status == true && (
+          <Link to={`/user/update/${post.id}`} className='edit'>
+            <CreateIcon />
+          </Link>
+        )}
+      </div>
+    </div>
+  ))
   return (
     <>
       <div className='container'>{cards}</div>
       {props.authState.status && (
         <>
-          <div id='form-btn'>
+          <Link to={`user/create/${props.authState.user.id}`} id='form-btn'>
             <AddIcon
               style={{ fontSize: '2.5rem', textShadow: '-1px 1px 0 #000' }}
             />
-          </div>
+          </Link>
           <div id='create'>create</div>
         </>
       )}
     </>
-  );
+  )
 }

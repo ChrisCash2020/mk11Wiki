@@ -1,24 +1,24 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect } from 'react'
+import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 export default function CharacterPage() {
-  const [data, setData] = useState({});
-  const params = useParams();
+  const [data, setData] = useState({})
+  const params = useParams()
   useEffect(() => {
     async function getPostById() {
-      const res = await fetch(`http://localhost:3000/posts/${params.postId}`);
-      const data = await res.json();
-      setData(data);
+      const res = await fetch(`http://localhost:3000/posts/${params.postId}`)
+      const data = await res.json()
+      setData(data)
     }
-    getPostById();
-  }, []);
+    getPostById()
+  }, [])
 
   const character = (
     <>
-      <div id='document-container-navbar'>
+      <div id='character-container-left'>
         <h2 className='overview-header name'>{data.name}</h2>
-        <img alt='Scorpion' src={data.image} />
+        <img alt='Character' src={data.image} />
         <section>
           <h2 className='overview-header'>General Information</h2>
           <div className='overview-container'>
@@ -45,7 +45,7 @@ export default function CharacterPage() {
           </div>
         </section>
       </div>
-      <div id='document-container-text'>
+      <div id='character-container-right'>
         <h1>About</h1>
         <p>{data.about}</p>
 
@@ -58,6 +58,6 @@ export default function CharacterPage() {
         <br />
       </div>
     </>
-  );
-  return <main>{character}</main>;
+  )
+  return <main>{character}</main>
 }
