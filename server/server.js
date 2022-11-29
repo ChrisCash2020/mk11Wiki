@@ -1,11 +1,11 @@
 require('dotenv').config() // ALLOWS ENVIRONMENT VARIABLES TO BE SET ON PROCESS.ENV SHOULD BE AT TOP
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-const session = require('cookie-session')
+const session = require('express-session')
 const express = require('express')
 const cors = require('cors')
 const app = express()
-
+const MssqlStore = require('mssql-session-store')(session)
 // Middleware
 app.use(express.json()) // parse json bodies in the request object
 
@@ -28,6 +28,7 @@ app.use(
     cookie: {
       expires: 1000 * 3600 * 24 * 7,
     },
+    store: new MssqlStore(),
   })
 )
 // Redirect requests to endpoint starting with /posts to postRoutes.js
