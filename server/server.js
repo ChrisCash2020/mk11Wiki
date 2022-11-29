@@ -1,7 +1,7 @@
 require('dotenv').config() // ALLOWS ENVIRONMENT VARIABLES TO BE SET ON PROCESS.ENV SHOULD BE AT TOP
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-const session = require('express-session')
+const session = require('cookie-session')
 const express = require('express')
 const cors = require('cors')
 const app = express()
