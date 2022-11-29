@@ -1,7 +1,7 @@
-const db = require('../config/db');
+const db = require('../config/db')
 class Post {
   constructor() {}
-
+  //static methods where i just pass parameters and query the data based on my needs
   static savePost(
     about,
     appearance,
@@ -11,7 +11,8 @@ class Post {
     gender,
     firstGame,
     lastGame,
-    birthPlace
+    birthPlace,
+    userId
   ) {
     const sql = `
 INSERT INTO Posts(
@@ -26,49 +27,72 @@ INSERT INTO Posts(
     birthPlace,
     userId
     )
-    VALUES("${about}"," ${appearance}", "${name}", "${image}", "${realName}", "${gender}", "${firstGame}", "${lastGame}", "${birthPlace}", 0
-    )`;
-    return db.execute(sql);
+    VALUES(?,?,?,?,?,?,?,?,?,?)`
+    return db.execute(sql, [
+      about,
+      appearance,
+      name,
+      image,
+      realName,
+      gender,
+      firstGame,
+      lastGame,
+      birthPlace,
+      userId,
+    ])
   }
   static saveTrivia(id, trivia) {
-    if (trivia == undefined) return trivia;
+    if (trivia == undefined) return trivia
     else {
-      let sql = `insert into Trivia (text, postId) values `;
-      for (let i = 0; i < trivia.length; i++) {
-        sql += `("${trivia[i]}", ${id}) `;
+      let sql = `INSERT INTO Trivia (text, postId) VALUES `
+      if (trivia.length == 0) {
+        return
       }
-      return db.execute(sql);
+      for (let i = 0; i < trivia.length; i++) {
+        sql = `${sql} ("${trivia[i]}", ${id}) `
+        //how to concat with backticks
+      }
+      console.log(sql)
+      return db.execute(sql)
     }
   }
   static getCurrentId() {
-    const sql = 'SELECT MAX(id) FROM Posts';
-    return db.execute(sql);
+    const sql = 'SELECT MAX(id) FROM Posts'
+    return db.execute(sql)
   }
 
   static getAllPostsNames() {
-    const sql = 'SELECT name, image, id, userId FROM Posts';
-    return db.execute(sql);
+    const sql = 'SELECT name, image, id, userId FROM Posts'
+    return db.execute(sql)
   }
   static findOnePost(id) {
-    const sql = `SELECT * FROM Posts p WHERE p.id = ${id} `;
+    const sql = `SELECT * FROM Posts p WHERE p.id = ? `
 
-    return db.execute(sql);
+    return db.execute(sql, [id])
   }
 
   static findTriviaByPost(id) {
-    const sql = `SELECT t.id, t.text, t.postId FROM Trivia t JOIN Posts ON t.postId = ${id} `;
-    return db.execute(sql);
+    const sql = `SELECT * FROM Trivia WHERE postId = ? `
+    return db.execute(sql, [id])
   }
   static updatePostRecord(record, value, id) {
     const sql = `UPDATE Posts
     SET ${record} = '${value}'
-    WHERE  id = ${id}`;
-    return db.execute(sql);
+    WHERE  id = ${id} `
+    return db.execute(sql)
+  }
+  static deleteTriviaRecord(postId) {
+    const sql = `DELETE FROM Trivia WHERE postId = ${postId}`
+    return db.execute(sql)
+  }
+  static updateTriviaRecord(value, id) {
+    const sql = `INSERT INTO Trivia( text, postId ) VALUES( ? , ? ) `
+    return db.execute(sql, [value, id])
   }
   static deletepOnePost(id) {
-    const sql = `DELETE FROM Posts WHERE id = ${id};`;
-    return db.execute(sql);
+    const sql = `DELETE FROM Posts WHERE id = ?;`
+    return db.execute(sql, [id])
   }
 }
 
-module.exports = Post;
+module.exports = Post
