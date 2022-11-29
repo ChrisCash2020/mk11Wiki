@@ -77,9 +77,9 @@ INSERT INTO Posts(
   }
   static updatePostRecord(record, value, id) {
     const sql = `UPDATE Posts
-    SET ${record} = '${value}'
+    SET ${record} = ?
     WHERE  id = ${id} `
-    return db.execute(sql)
+    return db.execute(sql, [value])
   }
   static deleteTriviaRecord(postId) {
     const sql = `DELETE FROM Trivia WHERE postId = ${postId}`
